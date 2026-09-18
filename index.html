@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>V.I.V.A. Kids</title>
+<meta name="theme-color" content="#FF8FB1">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFF6E9;
+  --ink:#3A2317;
+  --w1a:#FFC93C; --w1b:#FF9F1C;
+  --w2a:#7ED957; --w2b:#3FA34D;
+  --w3a:#FF6FA0; --w3b:#E8447A;
+  --w4a:#A66CFF; --w4b:#7B3FE4;
+  --w5a:#4FC3F7; --w5b:#1E9AD6;
+  --w6a:#2DD4BF; --w6b:#0EA394;
+  --card-shadow: 0 6px 0 rgba(58,35,23,0.18);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--cream);
+  background-image:
+    radial-gradient(circle at 10% 15%, rgba(255,201,60,0.18) 0, transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(79,195,247,0.16) 0, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(166,108,255,0.14) 0, transparent 40%);
+  color:var(--ink);
+  min-height:100vh;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Baloo 2',cursive;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+.app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:28px;}
+
+/* ---------- topbar ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px 10px;
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-badge{
+  width:42px;height:42px;border-radius:14px;
+  background:linear-gradient(135deg,var(--w1a),var(--w3a));
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  box-shadow:0 4px 0 rgba(58,35,23,0.15);
+}
+.brand-text h1{font-size:20px;margin:0;line-height:1;color:var(--ink);}
+.brand-text span{font-size:11.5px;font-weight:700;color:#8a6a4f;letter-spacing:.2px;}
+.stars-total{
+  display:flex;align-items:center;gap:5px;background:#fff;
+  padding:7px 12px;border-radius:999px;box-shadow:var(--card-shadow);
+  font-weight:800;font-size:14px;
+}
+
+/* ---------- install banner ---------- */
+#installBanner{
+  display:none;margin:0 16px 10px;padding:10px 14px;border-radius:16px;
+  background:#fff;box-shadow:var(--card-shadow);
+  align-items:center;justify-content:space-between;gap:10px;font-size:13.5px;font-weight:700;
+}
+#installBanner button.go{
+  background:var(--w5a);color:#fff;padding:8px 14px;border-radius:999px;font-weight:800;font-size:13px;
+}
+#installBanner button.close{font-size:18px;color:#b3a190;padding:4px;}
+
+/* ---------- screens ---------- */
+.screen{display:none;padding:4px 16px 40px;animation:fadeIn .25s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ---------- home / mascot ---------- */
+.mascot-row{display:flex;align-items:center;gap:12px;margin:6px 0 18px;}
+.mascot-face{
+  width:64px;height:64px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--w1a),var(--w3a),var(--w5a));
+  display:flex;align-items:center;justify-content:center;font-size:34px;
+  box-shadow:0 4px 0 rgba(58,35,23,0.18);
+}
+.speech{
+  background:#fff;border-radius:16px 16px 16px 4px;padding:10px 14px;
+  box-shadow:var(--card-shadow);font-weight:700;font-size:14.5px;flex:1;
+}
+.speech b{color:var(--w4b);}
+
+.course-title{font-size:23px;margin:2px 0 2px;}
+.course-sub{font-size:13.5px;color:#8a6a4f;font-weight:700;margin-bottom:20px;}
+
+/* ---------- adventure path ---------- */
+.path{position:relative;padding:6px 0 10px;}
+.path::before{
+  content:"";position:absolute;left:34px;top:20px;bottom:20px;width:5px;
+  background:repeating-linear-gradient(to bottom, #e8dcc8 0 10px, transparent 10px 18px);
+  border-radius:4px;
+}
+.week-node{
+  position:relative;display:flex;align-items:center;gap:14px;
+  margin-bottom:18px;text-align:left;width:100%;
+}
+.node-dot{
+  width:70px;height:70px;border-radius:22px;flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;font-family:'Baloo 2';box-shadow:0 5px 0 rgba(0,0,0,0.15);
+  position:relative;z-index:1;transition:transform .15s;
+}
+.week-node:active .node-dot{transform:scale(0.94);}
+.node-dot .num{font-size:11px;font-weight:700;opacity:.85;}
+.node-dot .icon{font-size:26px;line-height:1;}
+.node-card{
+  flex:1;background:#fff;border-radius:16px;padding:12px 14px;
+  box-shadow:var(--card-shadow);
+}
+.node-card h3{margin:0 0 2px;font-size:16px;}
+.node-card p{margin:0;font-size:12px;color:#8a6a4f;font-weight:700;}
+.node-stars{margin-top:6px;font-size:13px;}
+.node-locked{opacity:.55;}
+
+/* ---------- week screen ---------- */
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:14px;
+  padding:8px 4px;margin-bottom:6px;color:var(--ink);
+}
+.week-hero{
+  border-radius:22px;padding:20px 18px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden;
+}
+.week-hero .tag{
+  display:inline-block;background:rgba(255,255,255,.28);padding:4px 12px;border-radius:999px;
+  font-size:11.5px;font-weight:800;margin-bottom:8px;
+}
+.week-hero h2{font-size:24px;margin:0 0 4px;}
+.week-hero .sub{font-weight:700;font-size:13px;opacity:.95;}
+.week-hero .big-icon{position:absolute;right:10px;top:8px;font-size:64px;opacity:.25;}
+
+.topics-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.topic-chip{
+  background:#fff;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:700;
+  box-shadow:0 3px 0 rgba(58,35,23,0.10);
+}
+.topic-chip .it{display:block;font-size:10.5px;color:#8a6a4f;font-weight:700;}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.action-card{
+  border-radius:18px;padding:16px 12px;background:#fff;box-shadow:var(--card-shadow);text-align:left;
+}
+.action-card .a-icon{font-size:26px;}
+.action-card h4{margin:8px 0 2px;font-size:15px;}
+.action-card p{margin:0;font-size:11.5px;color:#8a6a4f;font-weight:700;}
+
+.project-card{
+  border-radius:18px;padding:16px;color:#fff;margin-top:4px;
+}
+.project-card .p-label{font-size:11px;font-weight:800;opacity:.9;text-transform:none;margin-bottom:4px;}
+.project-card h4{margin:0 0 4px;font-size:17px;}
+.project-card p{margin:0;font-size:13px;font-weight:700;opacity:.95;}
+.complete-btn{
+  margin-top:12px;width:100%;padding:13px;border-radius:14px;background:#fff;
+  font-weight:800;font-size:14.5px;box-shadow:0 3px 0 rgba(0,0,0,0.12);
+}
+.complete-btn.done{background:rgba(255,255,255,.25);color:#fff;}
+
+/* ---------- daily formula ---------- */
+.formula-title{font-size:15px;margin:22px 0 10px;}
+.formula-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;}
+.formula-step{
+  flex-shrink:0;width:82px;background:#fff;border-radius:14px;padding:10px 6px;text-align:center;
+  box-shadow:0 3px 0 rgba(58,35,23,0.10);
+}
+.formula-step .f-icon{font-size:20px;}
+.formula-step .f-name{font-size:10.5px;font-weight:800;margin-top:4px;line-height:1.15;}
+.formula-step .f-time{font-size:9.5px;color:#8a6a4f;font-weight:700;}
+
+/* ---------- flashcards ---------- */
+.progress-dots{display:flex;gap:5px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+.progress-dots span{width:7px;height:7px;border-radius:50%;background:#e8dcc8;}
+.progress-dots span.on{background:var(--dotcolor,#FF9F1C);}
+
+.flash-stage{height:280px;perspective:1200px;margin-bottom:18px;}
+.flash-card{
+  width:100%;height:100%;position:relative;transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.4,.2,.2,1);border-radius:24px;
+  box-shadow:0 8px 0 rgba(58,35,23,0.15);
+}
+.flash-card.flipped{transform:rotateY(180deg);}
+.flash-face{
+  position:absolute;inset:0;border-radius:24px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;backface-visibility:hidden;padding:20px;text-align:center;
+}
+.flash-face.front{color:#fff;}
+.flash-face.back{background:#fff;transform:rotateY(180deg);}
+.flash-face .lang-tag{font-size:11px;font-weight:800;letter-spacing:.3px;opacity:.85;margin-bottom:10px;}
+.flash-face .word{font-family:'Baloo 2';font-size:30px;line-height:1.15;}
+.flash-face .hint{margin-top:14px;font-size:12px;font-weight:700;opacity:.75;}
+.flash-face.back .word{color:var(--ink);}
+.flash-face.back .lang-tag{color:#8a6a4f;}
+
+.flash-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.nav-btn{
+  width:52px;height:52px;border-radius:16px;background:#fff;box-shadow:var(--card-shadow);
+  font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.nav-btn:disabled{opacity:.35;}
+.flip-btn{
+  flex:1;padding:14px;border-radius:16px;font-weight:800;font-size:14.5px;color:#fff;
+  box-shadow:0 4px 0 rgba(0,0,0,0.15);
+}
+
+/* ---------- quiz ---------- */
+.quiz-progress{font-size:12.5px;font-weight:800;color:#8a6a4f;margin-bottom:10px;}
+.quiz-bar{height:8px;border-radius:999px;background:#eee0cc;overflow:hidden;margin-bottom:20px;}
+.quiz-bar-fill{height:100%;border-radius:999px;transition:width .3s;}
+.quiz-q{
+  background:#fff;border-radius:20px;padding:22px 18px;text-align:center;margin-bottom:18px;
+  box-shadow:var(--card-shadow);
+}
+.quiz-q .qlabel{font-size:11.5px;font-weight:800;color:#8a6a4f;margin-bottom:6px;}
+.quiz-q .qword{font-family:'Baloo 2';font-size:26px;}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;}
+.quiz-opt{
+  padding:14px 16px;border-radius:14px;background:#fff;font-weight:700;font-size:15px;text-align:left;
+  box-shadow:0 3px 0 rgba(58,35,23,0.10);border:2.5px solid transparent;
+}
+.quiz-opt.correct{border-color:#3FA34D;background:#eafbe8;}
+.quiz-opt.wrong{border-color:#E8447A;background:#fdeaf0;}
+
+.result-card{text-align:center;padding:26px 18px;border-radius:22px;color:#fff;}
+.result-card .r-icon{font-size:48px;}
+.result-card h3{font-size:22px;margin:8px 0 4px;}
+.result-card p{margin:0;font-weight:700;font-size:14px;opacity:.95;}
+.result-actions{display:flex;gap:10px;margin-top:16px;}
+.result-actions button{
+  flex:1;padding:13px;border-radius:14px;font-weight:800;font-size:14px;background:#fff;color:var(--ink);
+}
+
+/* util colors per week set via inline style vars */
+.done-badge{display:inline-flex;align-items:center;gap:4px;background:#fff;border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:800;color:#3FA34D;margin-left:6px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-badge">🐿️</div>
+      <div class="brand-text">
+        <h1>V.I.V.A. Kids</h1>
+        <span>English + Italiano · A1</span>
+      </div>
+    </div>
+    <div class="stars-total">⭐ <span id="totalStars">0</span>/6</div>
+  </div>
+
+  <div id="installBanner">
+    <span>📲 ¡Instala la app en tu pantalla de inicio!</span>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button class="go" id="installGo">Instalar</button>
+      <button class="close" id="installClose">✕</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <section class="screen active" id="screen-home">
+    <div class="mascot-row">
+      <div class="mascot-face">🐿️</div>
+      <div class="speech">¡Hola! ¡Ciao! Soy <b>Nuri</b>. ¿Listos para nuestra aventura de 6 semanas? 🌎</div>
+    </div>
+    <div class="course-title">Bilingual Holiday Course</div>
+    <div class="course-sub">6 semanas · 30 días · elige una semana para empezar</div>
+    <div class="path" id="pathList"></div>
+  </section>
+
+  <!-- WEEK -->
+  <section class="screen" id="screen-week">
+    <button class="back-btn" id="backHome">← Inicio</button>
+    <div class="week-hero" id="weekHero">
+      <div class="big-icon" id="weekBigIcon"></div>
+      <div class="tag" id="weekTag"></div>
+      <h2 id="weekTitle"></h2>
+      <div class="sub" id="weekSub"></div>
+    </div>
+
+    <div class="topics-wrap" id="topicsWrap"></div>
+
+    <div class="action-grid">
+      <button class="action-card" id="goFlash">
+        <div class="a-icon">🃏</div>
+        <h4>Discover</h4>
+        <p>Tarjetas de vocabulario</p>
+      </button>
+      <button class="action-card" id="goQuiz">
+        <div class="a-icon">🎮</div>
+        <h4>Practice</h4>
+        <p>Juego de preguntas</p>
+      </button>
+    </div>
+
+    <div class="project-card" id="projectCard">
+      <div class="p-label">⭐ Proyecto final de la semana</div>
+      <h4 id="projectTitle"></h4>
+      <p id="projectDesc"></p>
+      <button class="complete-btn" id="completeBtn">Marcar semana como completa</button>
+    </div>
+
+    <div class="formula-title">La fórmula diaria</div>
+    <div class="formula-row">
+      <div class="formula-step"><div class="f-icon">☀️</div><div class="f-name">Welcome</div><div class="f-time">5 min</div></div>
+      <div class="formula-step"><div class="f-icon">💡</div><div class="f-name">Discover</div><div class="f-time">10 min</div></div>
+      <div class="formula-step"><div class="f-icon">🎮</div><div class="f-name">Practice</div><div class="f-time">10 min</div></div>
+      <div class="formula-step"><div class="f-icon">🎨</div><div class="f-name">Create</div><div class="f-time">10 min</div></div>
+      <div class="formula-step"><div class="f-icon">⭐</div><div class="f-name">Challenge</div><div class="f-time">5 min</div></div>
+      <div class="formula-step"><div class="f-icon">💛</div><div class="f-name">Goodbye</div><div class="f-time">5 min</div></div>
+    </div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section class="screen" id="screen-flash">
+    <button class="back-btn" id="backFromFlash">← Semana</button>
+    <div class="progress-dots" id="flashDots"></div>
+    <div class="flash-stage">
+      <div class="flash-card" id="flashCard">
+        <div class="flash-face front" id="flashFront">
+          <div class="lang-tag">ENGLISH</div>
+          <div class="word" id="flashWordEn"></div>
+          <div class="hint">Toca para ver en italiano 👆</div>
+        </div>
+        <div class="flash-face back" id="flashBack">
+          <div class="lang-tag">ITALIANO</div>
+          <div class="word" id="flashWordIt"></div>
+          <div class="hint">Toca para volver 👆</div>
+        </div>
+      </div>
+    </div>
+    <div class="flash-nav">
+      <button class="nav-btn" id="flashPrev">←</button>
+      <button class="flip-btn" id="flashFlip">Voltear tarjeta</button>
+      <button class="nav-btn" id="flashNext">→</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="screen-quiz">
+    <button class="back-btn" id="backFromQuiz">← Semana</button>
+    <div id="quizLive">
+      <div class="quiz-progress" id="quizProgress"></div>
+      <div class="quiz-bar"><div class="quiz-bar-fill" id="quizBarFill"></div></div>
+      <div class="quiz-q">
+        <div class="qlabel" id="quizQLabel">¿Cómo se dice en italiano...?</div>
+        <div class="qword" id="quizQWord"></div>
+      </div>
+      <div class="quiz-opts" id="quizOpts"></div>
+    </div>
+    <div id="quizResult" style="display:none;"></div>
+  </section>
+
+</div>
+
+<script>
+/* ================= DATA ================= */
+const WEEKS = [
+  {
+    id:1, icon:"👋", a:"var(--w1a)", b:"var(--w1b)",
+    tag:"Greetings & Me | Saluti & Io",
+    title:"Welcome to V.I.V.A.!",
+    sub:"Semana 1",
+    topics:[["Hello / Hi / Goodbye","Ciao / Buongiorno / Arrivederci"],["What's your name?","Come ti chiami?"],["How are you?","Come stai?"],["Feelings","Emozioni"],["Favorite things","Cosa ti piace?"],["Numbers 1–20","Numeri 1–20"],["Classroom language","Linguaggio classe"]],
+    vocab:[["Hello","Ciao"],["Good morning","Buongiorno"],["Goodbye","Arrivederci"],["My name is...","Mi chiamo..."],["How are you?","Come stai?"],["I'm fine","Sto bene"],["Happy","Felice"],["Sad","Triste"],["One","Uno"],["Ten","Dieci"],["Twenty","Venti"],["Please","Per favore"],["Thank you","Grazie"],["Listen","Ascolta"]],
+    project:{title:"Meet the V.I.V.A. Team", desc:"Preséntate en inglés y en italiano."}
+  },
+  {
+    id:2, icon:"🏠", a:"var(--w2a)", b:"var(--w2b)",
+    tag:"Family & Home | Famiglia & Casa",
+    title:"My World",
+    sub:"Semana 2",
+    topics:[["Family members","Famiglia"],["House rooms","Stanze della casa"],["Furniture & objects","Mobili e oggetti"],["This is my...","Questo è..."],["I have...","Ho..."],["Where is...?","Dov'è...?"],["In / on / under","In / su / sotto"]],
+    vocab:[["Mother","Madre"],["Father","Padre"],["Sister","Sorella"],["Brother","Fratello"],["Bedroom","Camera da letto"],["Kitchen","Cucina"],["Bathroom","Bagno"],["Living room","Soggiorno"],["Table","Tavolo"],["Chair","Sedia"],["Bed","Letto"],["In","In"],["On","Su"],["Under","Sotto"],["Where is...?","Dov'è...?"]],
+    project:{title:"My Dream House", desc:"Diseña tu casa y describe habitaciones y objetos."}
+  },
+  {
+    id:3, icon:"🍕", a:"var(--w3a)", b:"var(--w3b)",
+    tag:"Food & Drinks | Cibo & Bevande",
+    title:"Yummy World",
+    sub:"Semana 3",
+    topics:[["Fruits & vegetables","Frutta e verdura"],["Snacks & drinks","Snack e bevande"],["Breakfast / lunch / dinner","Colazione / pranzo / cena"],["I like / I don't like","Mi piace / Non mi piace"],["Do you like...?","Ti piace...?"],["Can I have...?","Posso avere...?"],["Please / Thank you","Per favore / Grazie"]],
+    vocab:[["Apple","Mela"],["Banana","Banana"],["Carrot","Carota"],["Water","Acqua"],["Juice","Succo"],["Breakfast","Colazione"],["Lunch","Pranzo"],["Dinner","Cena"],["I like","Mi piace"],["I don't like","Non mi piace"],["Do you like...?","Ti piace...?"],["Can I have...?","Posso avere...?"],["Pizza","Pizza"],["Bread","Pane"]],
+    project:{title:"V.I.V.A. Mini Restaurant", desc:"Pide comida en ambos idiomas."}
+  },
+  {
+    id:4, icon:"🎨", a:"var(--w4a)", b:"var(--w4b)",
+    tag:"Colors, Clothes & Toys | Colori, Vestiti & Giocattoli",
+    title:"Let's Play!",
+    sub:"Semana 4",
+    topics:[["Colors","Colori"],["Clothes","Vestiti"],["Toys","Giocattoli"],["Big / small","Grande / piccolo"],["New / old","Nuovo / vecchio"],["My favorite color is...","Il mio colore preferito è..."],["I'm wearing...","Indosso..."],["What color is it?","Di che colore è?"]],
+    vocab:[["Red","Rosso"],["Blue","Blu"],["Green","Verde"],["Yellow","Giallo"],["T-shirt","Maglietta"],["Shoes","Scarpe"],["Hat","Cappello"],["Ball","Palla"],["Doll","Bambola"],["Big","Grande"],["Small","Piccolo"],["New","Nuovo"],["Old","Vecchio"],["What color is it?","Di che colore è?"]],
+    project:{title:"My V.I.V.A. Character", desc:"Crea y presenta tu personaje en ambos idiomas."}
+  },
+  {
+    id:5, icon:"🌳", a:"var(--w5a)", b:"var(--w5b)",
+    tag:"Places, Animals & Nature | Luoghi, Animali & Natura",
+    title:"Adventure Time",
+    sub:"Semana 5",
+    topics:[["Places (school, park, house...)","Luoghi (scuola, parco, casa...)"],["Animals","Animali"],["Nature & weather","Natura e clima"],["What's this?","Cos'è questo?"],["Where is...?","Dov'è...?"],["I can see...","Vedo..."],["I like...","Mi piace..."]],
+    vocab:[["School","Scuola"],["Park","Parco"],["Mountain","Montagna"],["Dog","Cane"],["Cat","Gatto"],["Bird","Uccello"],["Sun","Sole"],["Rain","Pioggia"],["Tree","Albero"],["What's this?","Cos'è questo?"],["I can see...","Vedo..."],["I like...","Mi piace..."]],
+    project:{title:"Nuri's Adventurer Map", desc:"Sigue el mapa y recibe instrucciones en ambos idiomas."}
+  },
+  {
+    id:6, icon:"🌍", a:"var(--w6a)", b:"var(--w6b)",
+    tag:"Review + Real-life English | Ripasso + Italiano reale",
+    title:"V.I.V.A. World Tour",
+    sub:"Semana 6",
+    topics:[["Greetings","Saluti"],["Introductions","Presentazioni"],["Family","Famiglia"],["Home","Casa"],["Food","Cibo"],["Colors","Colori"],["Clothes","Vestiti"],["Animals","Animali"],["Places","Luoghi"],["Likes / dislikes","Mi piace / non mi piace"],["Basic questions","Domande semplici"],["Basic instructions","Istruzioni"]],
+    vocab:[["Nice to meet you","Piacere"],["See you soon","Ci vediamo presto"],["What's your favorite...?","Qual è il tuo... preferito?"],["I am from...","Vengo da..."],["Hello","Ciao"],["Family","Famiglia"],["House","Casa"],["Food","Cibo"],["Animal","Animale"],["Friend","Amico/a"],["Today","Oggi"],["Let's go!","Andiamo!"]],
+    project:{title:"My Bilingual World", desc:"Crea tu personaje viajero y preséntate en inglés + italiano."}
+  }
+];
+
+/* ================= STATE ================= */
+const STORAGE_KEY = "vivaKidsProgress_v1";
+function loadProgress(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveProgress(p){ localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }
+let progress = loadProgress();
+
+let currentWeekIndex = 0;
+let flashIndex = 0;
+let flashFlipped = false;
+let quizQueue = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizLocked = false;
+
+/* ================= NAV ================= */
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+
+/* ================= HOME / PATH ================= */
+function renderHome(){
+  const wrap = document.getElementById("pathList");
+  wrap.innerHTML = "";
+  let stars = 0;
+  WEEKS.forEach((w,i)=>{
+    const done = !!(progress[w.id] && progress[w.id].completed);
+    if(done) stars++;
+    const btn = document.createElement("button");
+    btn.className = "week-node";
+    btn.innerHTML = `
+      <div class="node-dot" style="background:linear-gradient(145deg, ${w.a}, ${w.b});">
+        <div class="icon">${done ? "🏆" : w.icon}</div>
+        <div class="num">S${w.id}</div>
+      </div>
+      <div class="node-card">
+        <h3>${w.title}</h3>
+        <p>${w.tag}</p>
+        <div class="node-stars">${done ? '<span class="done-badge">⭐ ¡Completado!</span>' : "☆ Toca para empezar"}</div>
+      </div>`;
+    btn.onclick = ()=>openWeek(i);
+    wrap.appendChild(btn);
+  });
+  document.getElementById("totalStars").textContent = stars;
+}
+
+/* ================= WEEK SCREEN ================= */
+function openWeek(i){
+  currentWeekIndex = i;
+  const w = WEEKS[i];
+  document.getElementById("weekHero").style.background = `linear-gradient(135deg, ${w.a}, ${w.b})`;
+  document.getElementById("weekBigIcon").textContent = w.icon;
+  document.getElementById("weekTag").textContent = w.tag;
+  document.getElementById("weekTitle").textContent = `${w.sub}: ${w.title}`;
+  document.getElementById("weekSub").textContent = `${w.vocab.length} palabras nuevas · 1 proyecto final`;
+
+  const topicsWrap = document.getElementById("topicsWrap");
+  topicsWrap.innerHTML = "";
+  w.topics.forEach(t=>{
+    const chip = document.createElement("div");
+    chip.className = "topic-chip";
+    chip.innerHTML = `${t[0]}<span class="it">${t[1]}</span>`;
+    topicsWrap.appendChild(chip);
+  });
+
+  document.getElementById("projectCard").style.background = `linear-gradient(135deg, ${w.b}, ${w.a})`;
+  document.getElementById("projectTitle").textContent = w.project.title;
+  document.getElementById("projectDesc").textContent = w.project.desc;
+
+  const done = !!(progress[w.id] && progress[w.id].completed);
+  const cBtn = document.getElementById("completeBtn");
+  cBtn.textContent = done ? "✓ Semana completada" : "Marcar semana como completa";
+  cBtn.className = "complete-btn" + (done ? " done" : "");
+
+  showScreen("screen-week");
+}
+
+document.getElementById("backHome").onclick = ()=>{ renderHome(); showScreen("screen-home"); };
+document.getElementById("completeBtn").onclick = ()=>{
+  const w = WEEKS[currentWeekIndex];
+  progress[w.id] = progress[w.id] || {};
+  progress[w.id].completed = true;
+  saveProgress(progress);
+  openWeek(currentWeekIndex);
+};
+
+/* ================= FLASHCARDS ================= */
+function openFlash(){
+  flashIndex = 0; flashFlipped = false;
+  renderFlash();
+  showScreen("screen-flash");
+}
+function renderFlash(){
+  const w = WEEKS[currentWeekIndex];
+  const pair = w.vocab[flashIndex];
+  document.getElementById("flashWordEn").textContent = pair[0];
+  document.getElementById("flashWordIt").textContent = pair[1];
+  document.getElementById("flashFront").style.background = `linear-gradient(135deg, ${w.a}, ${w.b})`;
+  const card = document.getElementById("flashCard");
+  flashFlipped = false;
+  card.classList.remove("flipped");
+  document.getElementById("flashPrev").disabled = flashIndex===0;
+  document.getElementById("flashNext").textContent = flashIndex === w.vocab.length-1 ? "🎮" : "→";
+
+  const dots = document.getElementById("flashDots");
+  dots.innerHTML = "";
+  w.vocab.forEach((_,i)=>{
+    const d = document.createElement("span");
+    if(i===flashIndex){ d.classList.add("on"); d.style.setProperty("--dotcolor", w.b); }
+    dots.appendChild(d);
+  });
+}
+document.getElementById("flashCard").onclick = ()=>{
+  flashFlipped = !flashFlipped;
+  document.getElementById("flashCard").classList.toggle("flipped", flashFlipped);
+};
+document.getElementById("flashFlip").onclick = (e)=>{ e.stopPropagation(); document.getElementById("flashCard").click(); };
+document.getElementById("flashPrev").onclick = ()=>{ if(flashIndex>0){ flashIndex--; renderFlash(); } };
+document.getElementById("flashNext").onclick = ()=>{
+  const w = WEEKS[currentWeekIndex];
+  if(flashIndex < w.vocab.length-1){ flashIndex++; renderFlash(); }
+  else { openQuiz(); }
+};
+document.getElementById("backFromFlash").onclick = ()=> showScreen("screen-week");
+document.getElementById("goFlash").onclick = openFlash;
+
+/* ================= QUIZ ================= */
+function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]); }
+
+function openQuiz(){
+  const w = WEEKS[currentWeekIndex];
+  quizQueue = shuffle(w.vocab.slice());
+  quizIndex = 0; quizScore = 0; quizLocked = false;
+  document.getElementById("quizLive").style.display = "block";
+  document.getElementById("quizResult").style.display = "none";
+  renderQuizQ();
+  showScreen("screen-quiz");
+}
+function renderQuizQ(){
+  const w = WEEKS[currentWeekIndex];
+  const total = quizQueue.length;
+  document.getElementById("quizProgress").textContent = `Pregunta ${quizIndex+1} de ${total}`;
+  document.getElementById("quizBarFill").style.width = `${(quizIndex/total)*100}%`;
+  document.getElementById("quizBarFill").style.background = w.b;
+
+  const item = quizQueue[quizIndex];
+  document.getElementById("quizQWord").textContent = item[0];
+
+  let wrongPool = w.vocab.filter(v=>v[1]!==item[1]).map(v=>v[1]);
+  wrongPool = shuffle(wrongPool).slice(0,2);
+  const opts = shuffle([item[1], ...wrongPool]);
+
+  const optsWrap = document.getElementById("quizOpts");
+  optsWrap.innerHTML = "";
+  quizLocked = false;
+  opts.forEach(opt=>{
+    const b = document.createElement("button");
+    b.className = "quiz-opt";
+    b.textContent = opt;
+    b.onclick = ()=> answerQuiz(opt===item[1], b, item[1]);
+    optsWrap.appendChild(b);
+  });
+}
+function answerQuiz(correct, btn, correctText){
+  if(quizLocked) return;
+  quizLocked = true;
+  if(correct){ quizScore++; btn.classList.add("correct"); }
+  else{
+    btn.classList.add("wrong");
+    [...document.getElementById("quizOpts").children].forEach(c=>{
+      if(c.textContent===correctText) c.classList.add("correct");
+    });
+  }
+  setTimeout(()=>{
+    quizIndex++;
+    if(quizIndex < quizQueue.length){ renderQuizQ(); }
+    else{ showQuizResult(); }
+  }, 700);
+}
+function showQuizResult(){
+  const w = WEEKS[currentWeekIndex];
+  document.getElementById("quizLive").style.display = "none";
+  const rWrap = document.getElementById("quizResult");
+  rWrap.style.display = "block";
+  const pct = Math.round((quizScore/quizQueue.length)*100);
+  const great = pct >= 80;
+  rWrap.innerHTML = `
+    <div class="result-card" style="background:linear-gradient(135deg, ${w.a}, ${w.b});">
+      <div class="r-icon">${great ? "🏆" : "🌟"}</div>
+      <h3>${great ? "¡Fantástico!" : "¡Buen trabajo!"}</h3>
+      <p>Acertaste ${quizScore} de ${quizQueue.length} (${pct}%)</p>
+    </div>
+    <div class="result-actions">
+      <button id="quizAgain">🔁 Repetir</button>
+      <button id="quizToWeek">✓ A la semana</button>
+    </div>`;
+  document.getElementById("quizAgain").onclick = openQuiz;
+  document.getElementById("quizToWeek").onclick = ()=> showScreen("screen-week");
+
+  if(great){
+    progress[w.id] = progress[w.id] || {};
+    if(!progress[w.id].bestQuiz || progress[w.id].bestQuiz < pct) progress[w.id].bestQuiz = pct;
+    saveProgress(progress);
+  }
+}
+document.getElementById("backFromQuiz").onclick = ()=> showScreen("screen-week");
+document.getElementById("goQuiz").onclick = openQuiz;
+
+/* ================= INSTALL PROMPT ================= */
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt",(e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  if(!localStorage.getItem("vivaKidsInstallDismissed")){
+    document.getElementById("installBanner").style.display = "flex";
+  }
+});
+document.getElementById("installGo").onclick = async ()=>{
+  document.getElementById("installBanner").style.display = "none";
+  if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; }
+};
+document.getElementById("installClose").onclick = ()=>{
+  document.getElementById("installBanner").style.display = "none";
+  localStorage.setItem("vivaKidsInstallDismissed","1");
+};
+
+/* ================= SERVICE WORKER ================= */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+  });
+}
+
+/* ================= INIT ================= */
+renderHome();
+</script>
+</body>
+</html>
